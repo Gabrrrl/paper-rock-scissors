@@ -1,7 +1,11 @@
+// Global var that all functions can use
+let playerScore = 0;
+let computerScore = 0;
+
 // Computer Random Choice function
 let computerPlay = () => {
     let choice = ['paper', 'rock', 'scissors']
-    let random = () => {return Math.floor(Math.random() * choice.length)};
+    let random = () => { return Math.floor(Math.random() * choice.length) };
     return choice[random()]
 }
 
@@ -21,16 +25,19 @@ document.getElementById('pick').addEventListener('click', e => {
     playRound(playerSelection, computerPlay());
 })
 
-// determines the winner between player choice and computer choice
+// determines the winner between player choice and computer choice, also adds 1 point to the playerpoints or computerpoints if there was a winner then calls the determineWinner function
 let playRound = (playerSelection, computerSelection) => {
     let result = ``
     if ((playerSelection == "rock" && computerSelection == "scissors") || (playerSelection == "paper" && computerSelection == "rock") || (playerSelection == "scissors" && computerSelection == "paper")) {
-        result = (`You Win! ${playerSelection} beats ${computerSelection}`)
-        
+        playerScore++
+        result = (`You Win! ${playerSelection} beats ${computerSelection}\nYou have ${playerScore} points And the computer has ${computerScore} points`)
+        determineWinner()
     } else if ((playerSelection == "rock" && computerSelection == "paper") || (playerSelection == "paper" && computerSelection == "scissors") || (playerSelection == "scissors" && computerSelection == "rock")) {
-        result = (`You Lose! ${computerSelection} beats ${playerSelection}`)
+        computerScore++
+        result = (`You Lose! ${computerSelection} beats ${playerSelection}\nYou have ${playerScore} points And the computer has ${computerScore} points`)
+        determineWinner()
     } else if (playerSelection == computerSelection) {
-        result = (`Its a Tie!`)
+        result = (`Its a Tie!\nYou have ${playerScore} points And the computer has ${computerScore} points`)
     } else {
         alert('Please pick between Paper, Rock or Scissors!')
         return
@@ -39,5 +46,16 @@ let playRound = (playerSelection, computerSelection) => {
     let pEl = document.createElement('p')
     pEl.textContent = result;
     document.getElementById('choice').appendChild(pEl)
+}
+
+// function that determines the winner after 5 wins and reloads the page after being acknowledgement
+let determineWinner = () => {
+    if (playerScore == 5) {
+        alert('You Won The Game!')
+        document.reload()
+    } else if (computerScore == 5) {
+        alert('You Lost The Game!')
+        document.reload()
+    }
 }
 
